@@ -8,8 +8,6 @@ const EditModeContext = createContext<EditModeContextType>({ isEditMode: false }
 
 export const useEditMode = () => useContext(EditModeContext);
 
-// const UNLOCK_CODE = 'i solemnly swear that i am up to no good';
-// const LOCK_CODE = 'mischief managed';
 const UNLOCK_CODE = import.meta.env.VITE_UNLOCK_CODE;
 const LOCK_CODE = import.meta.env.VITE_LOCK_CODE;
 
