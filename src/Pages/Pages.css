@@ -1,0 +1,271 @@
+/* Carousal Styles */
+.carousal-container-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin: 0;
+    margin-top: auto;
+    margin-bottom: auto;
+    padding: 0;
+    overflow-y: auto;
+    scrollbar-width: none;
+}
+.carousal-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    gap: 1rem;
+    width: 95vw;
+}
+.form-button-container {
+    position: relative;
+    justify-content: space-around;
+}
+.form-button {
+    border-radius: 2rem;
+    border: none;
+    background: rgba(135, 206, 250, 0.25); /* sky blue glass */
+    color: #222;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.25);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1.5px solid rgba(135, 206, 250, 0.5);
+    cursor: pointer;
+    animation: form-button-glow 1.2s infinite alternate;
+}
+.form-button-add {
+    margin-top: -2rem;
+    margin-bottom: 2rem;
+}
+@keyframes form-button-glow {
+    0% {
+        box-shadow: 0 0 16px 4px #87cefa, 0 8px 32px 0 rgba(31, 38, 135, 0.25);
+        background: rgba(135, 206, 250, 0.25);
+    }
+    100% {
+        box-shadow: 0 0 32px 8px #87cefa, 0 8px 32px 0 rgba(31, 38, 135, 0.25);
+        background: rgba(135, 206, 250, 0.35);
+    }
+}
+
+/* Homepage Styles */
+.dp {
+    height: clamp(220px, 22vw, 480px);
+    width: clamp(220px, 22vw, 480px);
+    object-fit: cover;
+    display: block;
+    border-radius: 50%;
+    margin: auto;
+    position: absolute;
+    top: 50%;
+    left: 25%;
+    transform: translate(-50%, -50%);
+    padding: 5px;
+    background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+    box-shadow: 0 0 20px #ff6b6b,
+                0 0 40px #4ecdc4;
+}
+.dp img {
+    border-radius: 50%;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+}
+.glass-container {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    padding: 2rem;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+}
+.greeting-text {
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.3),
+                 0 0 20px rgba(0, 0, 0, 0.2),
+                 0 0 30px rgba(0, 0, 0, 0.1),
+                 0 0 40px rgba(0, 0, 0, 0.1);
+    font-size: 6rem;
+}
+.designation-text {
+    text-shadow: 0 0 10px rgba(0, 0, 0, 0.2),
+                 0 0 20px rgba(0, 0, 0, 0.1),
+                 0 0 30px rgba(0, 0, 0, 0.1);
+    font-size: 3rem;
+}
+.information-text {
+    font-size: 1.5rem;
+}
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+.animate-blink {
+    animation: blink 1s step-end infinite;
+}
+@keyframes wave {
+    0% { transform: rotate(0deg); }
+    10% { transform: rotate(14deg); }
+    20% { transform: rotate(-8deg); }
+    30% { transform: rotate(14deg); }
+    40% { transform: rotate(-4deg); }
+    50% { transform: rotate(10deg); }
+    60% { transform: rotate(0deg); }
+    100% { transform: rotate(0deg); }
+}
+.wave-emoji {
+    display: inline-block;
+    animation: wave 2.5s infinite;
+    transform-origin: 70% 70%;
+    margin-left: 10px;
+}
+@media screen and (max-width: 768px) {
+    .dp {
+        position: relative;
+        top: 45%;
+        left: 0;
+        transform: none;
+        margin: 0 auto;
+        margin-top: clamp(8vh, 10vw, 18vh);
+        height: clamp(180px, 28vw, 320px);
+        width: clamp(180px, 28vw, 320px);
+    }
+}
+@media screen and (min-width: 769px) and (max-width: 1024px) {
+    .dp {
+        position: relative;
+        top: 22%;
+        left: 0;
+        transform: none;
+        margin: 0 auto;
+        margin-top: clamp(8vh, 10vw, 18vh);
+        height: clamp(180px, 28vw, 320px);
+        width: clamp(180px, 28vw, 320px);
+    }
+}
+@media screen and (max-width: 1024px) {
+    .glass-container {
+        padding: clamp(0.75rem, 3vw, 2rem);
+        margin: 0 auto;
+        width: 85%;
+        max-width: 500px;
+        transform: translateY(-18%);
+    }
+    .greeting-text {
+        font-size: clamp(3rem, 6vw, 3rem) !important;
+        line-height: 1.2;
+        margin-bottom: 0.5rem;
+    }
+    .designation-text {
+        font-size: clamp(1.8rem, 3vw, 2.5rem) !important;
+        line-height: 1.2;
+    }
+    .information-text {
+        line-height: 1.2;
+    }
+}
+.revelio-btn {
+    position: absolute;
+    left: 50%;
+    bottom: 5vh;
+    width: 220px;
+    transform: translateX(-50%);
+    padding: 1rem 3rem;
+    border-radius: 2rem;
+    border: none;
+    background: rgba(135, 206, 250, 0.25); /* sky blue glass */
+    color: #222;
+    font-size: 1.5rem;
+    font-weight: 600;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.25);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1.5px solid rgba(135, 206, 250, 0.5);
+    cursor: pointer;
+    transition: background 0.3s, color 0.3s;
+    z-index: 10;
+    animation: revelio-glow 1.2s infinite alternate;
+}
+@keyframes revelio-glow {
+    0% {
+        box-shadow: 0 0 16px 4px #87cefa, 0 8px 32px 0 rgba(31, 38, 135, 0.25);
+        background: rgba(135, 206, 250, 0.25);
+    }
+    100% {
+        box-shadow: 0 0 32px 8px #87cefa, 0 8px 32px 0 rgba(31, 38, 135, 0.25);
+        background: rgba(135, 206, 250, 0.35);
+    }
+}
+.reveal-animating {
+  width: 64px;
+  height: 64px;
+  padding: 0;
+  border-radius: 50%;
+  background: rgba(135, 206, 250, 0.35);
+  box-shadow: 0 0 32px 8px #87cefa;
+  transition: all 2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.wand-container {
+  position: relative;
+  display: flex;
+  width: 100px;
+  justify-content: center;
+  align-items: center;
+  animation: wand-oscillate 0.6s ease-in-out infinite alternate;
+}
+.wand-icon {
+  width: 32px;
+  height: 32px;
+}
+@keyframes wand-oscillate {
+  0% {
+    transform: rotate(-20deg);
+  }
+  100% {
+    transform: rotate(20deg);
+  }
+}
+.spark-container {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+.spark {
+  position: absolute;
+  bottom: 0;
+  width: 4px;
+  height: 4px;
+  background: radial-gradient(circle, #ffd700, #ffffff);
+  border-radius: 50%;
+  opacity: 0;
+  animation: spark-rise 0.5s ease-out infinite;
+}
+@keyframes spark-rise {
+  0% {
+    transform: translate(0, 0) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(var(--x), -60px) scale(0.3);
+    opacity: 0;
+  }
+}
+/* Create 8 differently randomized directions */
+.spark-0 { --x: -10px; animation-delay: 0s; }
+.spark-1 { --x: 10px; animation-delay: 0.1s; }
+.spark-2 { --x: -5px; animation-delay: 0.2s; }
+.spark-3 { --x: 5px; animation-delay: 0.3s; }
+.spark-4 { --x: -15px; animation-delay: 0.4s; }
+.spark-5 { --x: 15px; animation-delay: 0.5s; }
+.spark-6 { --x: -8px; animation-delay: 0.6s; }
+.spark-7 { --x: 8px; animation-delay: 0.7s; }

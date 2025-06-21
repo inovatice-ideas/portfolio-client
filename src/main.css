@@ -1,0 +1,38 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+@import url('https://fonts.cdnfonts.com/css/lumos');
+
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: 'HarryPotterFont';
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.background-overall {
+  width: 100vw;
+  height: 100vh;
+}
+.page-content {
+  position: relative;
+  margin-top: 65px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  height: 85vh;
+  max-height: 85vh;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+.social-media-section {
+  position: fixed;
+  bottom: 0;
+  width: 100vw;
+  height: 5vh;
+}
