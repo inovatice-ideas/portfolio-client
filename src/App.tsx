@@ -22,7 +22,7 @@ import { useExperienceData, addExperienceData, updateExperienceData, deleteExper
 import { useBlogData, addBlogData, updateBlogData, deleteBlogData, Blog } from './apicalls/fetchBlogs';
 import { useCvData, addCvData, updateCvData, deleteCvData, Cv } from './apicalls/fetchCv';
 import { useEffect, useState } from 'react';
-import Footsteps from './Components/Footsteps';
+// import Footsteps from './Components/Footsteps';
 
 function AppContent() {
   const location = useLocation();
@@ -79,7 +79,7 @@ function AppContent() {
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat'
       }} />
-      {isEditMode ? <Footsteps /> : <Particles />}
+      {isEditMode ? <Particles /> : <Particles />}  {/* TODO: Add Footsteps */}
       <Navbar />
       <div className="min-h-[calc(100vh-4rem)] flex flex-col">
         {isHomePage ? (
