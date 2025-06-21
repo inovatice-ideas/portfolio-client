@@ -11,7 +11,9 @@ import Navbar from './Components/Navbar';
 import Particles from './Components/Particles';
 import SocialMediaButtons from './Components/SocialMediaButtons';
 import { EditModeProvider } from './Components/EditMode';
+import { useEditMode } from './Components/EditMode';
 import background from './assets/Background.png'
+import editBackground from './assets/EditWallpaper.jpg'
 import "./main.css"
 import { useBioDetailsData } from './apicalls/fetchBioDetails';
 import { useBioData, updateBioData, BioData } from './apicalls/fetchBio';
@@ -30,6 +32,7 @@ function AppContent() {
   const experienceData = useExperienceData();
   const blogData = useBlogData();
   const cvData = useCvData();
+  const { isEditMode } = useEditMode();
   
   const [projects, setProjects] = useState<Project[]>([]);
   const [bio, setBio] = useState<BioData>({ bio: bioData?.bio || '' });
@@ -75,8 +78,8 @@ function AppContent() {
 
   return (
     <>
-      <div className='fixed inset-0 -z-10 background-overall' style={{
-        backgroundImage: `url(${background})`,
+      <div className={`fixed inset-0 -z-10 ${isEditMode ? 'background-overall-edit' : 'background-overall'}`} style={{
+        backgroundImage: `url(${isEditMode ? editBackground : background})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat'
