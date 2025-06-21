@@ -15,7 +15,7 @@ const LOCK_CODE = import.meta.env.VITE_LOCK_CODE;
 
 export const EditModeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [isEditMode, setIsEditMode] = useState(false);
-  const [inputBuffer, setInputBuffer] = useState('');
+  const [_, setInputBuffer] = useState('');
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
