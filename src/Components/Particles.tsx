@@ -33,10 +33,8 @@ const Particles: React.FC = () => {
     speedY: (Math.random() - 0.5) * 0.3,
     color: colors[Math.floor(Math.random() * colors.length)],
     opacity: Math.random() * 0.5 + 0.5, // Random initial opacity
-    twinkleSpeed: Math.random() * 0.2 + 0.01, // Random twinkle speed
-    glowSize: Math.random() * 5 + 1 // Random glow size
-    // twinkleSpeed: Math.random() * 0.02 + 0.01, // Random twinkle speed
-    // glowSize: Math.random() * 2 + 1 // Random glow size
+    twinkleSpeed: Math.random() * 0.02 + 0.01, // Random twinkle speed
+    glowSize: Math.random() * 2 + 1 // Random glow size
   });
 
   const initParticles = () => {
