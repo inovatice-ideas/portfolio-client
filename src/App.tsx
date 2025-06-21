@@ -22,6 +22,7 @@ import { useExperienceData, addExperienceData, updateExperienceData, deleteExper
 import { useBlogData, addBlogData, updateBlogData, deleteBlogData, Blog } from './apicalls/fetchBlogs';
 import { useCvData, addCvData, updateCvData, deleteCvData, Cv } from './apicalls/fetchCv';
 import { useEffect, useState } from 'react';
+import Footsteps from './Components/Footsteps';
 
 function AppContent() {
   const location = useLocation();
@@ -70,12 +71,6 @@ function AppContent() {
     }
   }, [cvData?.cvs]);
 
-  // useEffect(() => {
-  //   // const pub = usePublicationData(bioDetailsData?.orcid || '');
-  //   // setPublications(pub?.publications || []);
-  //   setPublications(publicationData?.publications || []);
-  // }, [bioDetailsData?.orcid]);
-
   return (
     <>
       <div className={`fixed inset-0 -z-10 ${isEditMode ? 'background-overall-edit' : 'background-overall'}`} style={{
@@ -84,7 +79,7 @@ function AppContent() {
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat'
       }} />
-      <Particles />
+      {isEditMode ? <Footsteps /> : <Particles />}
       <Navbar />
       <div className="min-h-[calc(100vh-4rem)] flex flex-col">
         {isHomePage ? (
