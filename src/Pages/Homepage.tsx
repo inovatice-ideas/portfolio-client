@@ -4,9 +4,9 @@ import dp from "../assets/dp.png"
 import wand from "../assets/wand.png"
 import "./Pages.css"
 
-function Homepage({bioDataName, bioDataDesignation}: {bioDataName: string, bioDataDesignation: string[]}) {
+function Homepage({bioDataName, bioDataDesignation}: {bioDataName: string, bioDataDesignation: string}) {
   const name = bioDataName;
-  const designations = bioDataDesignation;
+  const designations = bioDataDesignation.split(', ');
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
   const [text, setText] = useState('');

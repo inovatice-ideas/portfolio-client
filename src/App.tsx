@@ -1,12 +1,4 @@
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
-import Homepage from './Pages/Homepage';
-import AboutMe from './Pages/AboutMe';
-import Projects from './Pages/Projects';
-import Experiences from './Pages/Experiences';
-import Publications from './Pages/Publications';
-import CV from './Pages/CV';
-import Blogs from './Pages/Blogs';
-import ContactMe from './Pages/ContactMe';
 import Navbar from './Components/Navbar';
 import Particles from './Components/Particles';
 import SocialMediaButtons from './Components/SocialMediaButtons';
@@ -15,19 +7,26 @@ import { useEditMode } from './Components/EditMode';
 import background from './assets/Background.png'
 import editBackground from './assets/EditWallpaper.jpg'
 import "./main.css"
-import { useBioDetailsData } from './apicalls/fetchBioDetails';
 import { useBioData, updateBioData, BioData } from './apicalls/fetchBio';
 import { useProjectData, addProjectData, updateProjectData, deleteProjectData, Project } from './apicalls/fetchProjects';
 import { useExperienceData, addExperienceData, updateExperienceData, deleteExperienceData, Experience } from './apicalls/fetchExperiences';
 import { useBlogData, addBlogData, updateBlogData, deleteBlogData, Blog } from './apicalls/fetchBlogs';
 import { useCvData, addCvData, updateCvData, deleteCvData, Cv } from './apicalls/fetchCv';
-import { useEffect, useState } from 'react';
+import { lazy, Suspense, useEffect, useState } from 'react';
 // import Footsteps from './Components/Footsteps';
+
+const Homepage = lazy(() => import('./Pages/Homepage'));
+const AboutMe = lazy(() => import('./Pages/AboutMe'));
+const Projects = lazy(() => import('./Pages/Projects'));
+const Experiences = lazy(() => import('./Pages/Experiences'));
+const Publications = lazy(() => import('./Pages/Publications'));
+const CV = lazy(() => import('./Pages/CV'));
+const Blogs = lazy(() => import('./Pages/Blogs'));
+const ContactMe = lazy(() => import('./Pages/ContactMe'));
 
 function AppContent() {
   const location = useLocation();
   const isHomePage = location.pathname === '/';
-  const bioDetailsData = useBioDetailsData();
   const bioData = useBioData();
   const projectData = useProjectData();
   const experienceData = useExperienceData();
@@ -81,10 +80,16 @@ function AppContent() {
       }} />
       {isEditMode ? <Particles /> : <Particles />}  {/* TODO: Add Footsteps */}
       <Navbar />
+      <Suspense fallback={
+        <div className="flex justify-center items-center h-screen bg-black text-white">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-b-4 border-white"></div>
+          <p className="ml-4">Loading...</p>
+        </div>
+      }>
       <div className="min-h-[calc(100vh-4rem)] flex flex-col">
         {isHomePage ? (
           <Routes>
-            <Route path='/' element={<Homepage bioDataName={bioDetailsData?.name || ''} bioDataDesignation={bioDetailsData?.designations || []} />} />
+            <Route path='/' element={<Homepage bioDataName={import.meta.env.VITE_NAME} bioDataDesignation={import.meta.env.VITE_DESIGNATION} />} />
           </Routes>
         ) : (
           <div className="page-content">
@@ -113,7 +118,7 @@ function AppContent() {
               />} />
               <Route 
                 path='/publications' 
-                element={<Publications bioDataPublications={bioDetailsData?.orcid || ''} 
+                element={<Publications bioDataPublications={import.meta.env.VITE_ORCID} 
               />} />
               <Route 
                 path='/resume' 
@@ -133,8 +138,8 @@ function AppContent() {
               />} />
               <Route 
                 path='/contactme' 
-                element={<ContactMe bioDataGmail={bioDetailsData?.socialMedia.gmail || ''} 
-                bioDataLinkedin={bioDetailsData?.socialMedia.linkedin || ''} 
+                element={<ContactMe bioDataGmail={import.meta.env.VITE_GMAIL_LINK} 
+                bioDataLinkedin={import.meta.env.VITE_LINKEDIN_LINK} 
               />} />
             </Routes>
           </div>
@@ -143,18 +148,19 @@ function AppContent() {
           <div className="social-media-section mt-auto py-4 px-4 bg-opacity-50 backdrop-blur-sm">
             <div className="max-w-7xl mx-auto">
               <SocialMediaButtons 
-                bioDataGithub={bioDetailsData?.socialMedia.github || ''} 
-                bioDataLinkedin={bioDetailsData?.socialMedia.linkedin || ''} 
-                bioDataTwitter={bioDetailsData?.socialMedia.twitter || ''} 
-                bioDataInstagram={bioDetailsData?.socialMedia.instagram || ''} 
-                bioDataFacebook={bioDetailsData?.socialMedia.facebook || ''} 
-                bioDataGmail={bioDetailsData?.socialMedia.gmail || ''} 
-                bioDataScholar={bioDetailsData?.socialMedia.scholar || ''} 
+                bioDataGithub={import.meta.env.VITE_GITHUB_LINK} 
+                bioDataLinkedin={import.meta.env.VITE_LINKEDIN_LINK} 
+                bioDataTwitter={import.meta.env.VITE_TWITTER_LINK} 
+                bioDataInstagram={import.meta.env.VITE_INSTAGRAM_LINK} 
+                bioDataFacebook={import.meta.env.VITE_FACEBOOK_LINK} 
+                bioDataGmail={import.meta.env.VITE_GMAIL_LINK} 
+                bioDataScholar={import.meta.env.VITE_SCHOLAR_LINK} 
               />
             </div>
           </div>
         )}
       </div>
+      </Suspense>
     </>
   );
 }
