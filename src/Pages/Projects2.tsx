@@ -1,9 +1,17 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, useState } from 'react';
 import GlassCard, { MessageChunk } from '../Components/GlassCard';
 import DynamicForm, { Field } from '../Components/Form';
 import { useEditMode } from '../Components/EditMode';
 import './Pages.css';
-import { Project, useProjectData, addProjectData, updateProjectData, deleteProjectData } from '../apicalls/fetchProjects';
+import { Project } from '../apicalls/fetchProjects';
+
+interface ProjectsProps {
+  bioDataProjects: Project[];
+  setProjects: React.Dispatch<React.SetStateAction<Project[]>>;
+  addProjectData: (project: Project) => Promise<any>;
+  updateProjectData: (id: string, project: Project) => Promise<any>;
+  deleteProjectData: (id: string) => Promise<any>;
+}
 
 function parseTimelineEndDate(timeline: string): Date {
   const [_, end] = timeline.split(' - ');
@@ -84,24 +92,16 @@ const projectFields: Field[] = [
   { label: 'Link', name: 'link', type: 'url', placeholder: 'Enter the link of the project', optional: true }
 ];
 
-const Projects: FC = () => {
+const Projects: FC<ProjectsProps> = ({ bioDataProjects, setProjects, addProjectData, updateProjectData, deleteProjectData }) => {
   const { isEditMode } = useEditMode();
-  const [projects, setProjects] = useState<Project[]>([]);
   const [isCarouselView, setIsCarouselView] = useState(true);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [showForm, setShowForm] = useState(false);
   const [isHoveringAdd, setIsHoveringAdd] = useState(false);
   const [formData, setFormData] = useState<Project>(defaultProject);
   const [isEdit, setIsEdit] = useState(false);
-  const bioDataProjects = useProjectData();
 
-  useEffect(() => {
-    if (bioDataProjects?.projects) {
-      setProjects(bioDataProjects.projects);
-    }
-  }, [bioDataProjects?.projects]);
-
-  const sortedProjects = sortProjectsByTimeline(projects);
+  const sortedProjects = sortProjectsByTimeline(bioDataProjects);
   const carousalChunks = convertProjectsToCarousalChunks(sortedProjects);
   const detailedChunks = convertProjectsToChunks(sortedProjects);
 
@@ -140,7 +140,7 @@ const Projects: FC = () => {
   
     try {
       const res = await deleteProjectData(projectId);
-      if (res?.status  === 204) { 
+      if (res.status === 204) {
         const updated = sortedProjects.filter((_, idx) => idx !== selectedIndex);
         setProjects(updated);
         setIsCarouselView(true);
@@ -164,7 +164,7 @@ const Projects: FC = () => {
   
     if (isEdit) {
       const res = await updateProjectData(sortedProjects[selectedIndex!]._id!, sanitizedData);
-      if (res?.status === 204) {
+      if (res.status === 204) {
         console.log("Update successful");
         const updated = sortedProjects.map((project, idx) => idx === selectedIndex ? formData : project);
         setProjects(updated);
@@ -176,9 +176,10 @@ const Projects: FC = () => {
       }
     } else {
       const res = await addProjectData(sanitizedData);
-      if (res?.status === 201) {
+      if (res.status === 201) {
         console.log("Add successful");
-        const updated = [...sortedProjects, res.project];
+        const pr = await res.json();
+        const updated = [...sortedProjects, pr.project];
         setProjects(updated);
         setShowForm(false);
         setIsCarouselView(true);

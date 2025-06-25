@@ -1,10 +1,10 @@
 import { FC, useState } from 'react';
 import GlassCard, { MessageChunk } from '../Components/GlassCard';
-import { usePublicationData } from '../apicalls/fetchPublications';
+import { Publication } from '../apicalls/fetchPublications';
 import './Pages.css';
 
 interface PublicationsProps {
-  bioDataPublications: string;
+  bioDataPublications: Publication[];
 }
 
 export const convertPublicationsToChunks = (bioDataPublications: any): MessageChunk[][] => {
@@ -47,12 +47,11 @@ export const convertPublicationsToCarousalChunks = (bioDataPublications: any): M
 
 
 const Publications: FC<PublicationsProps> = ({ bioDataPublications }) => {
-  const publicationData = usePublicationData(bioDataPublications);
   const [isCarouselView, setIsCarouselView] = useState(true);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
-  const carousalChunks = convertPublicationsToCarousalChunks(publicationData?.publications || []);
-  const detailedChunks = convertPublicationsToChunks(publicationData?.publications || []);
+  const carousalChunks = convertPublicationsToCarousalChunks(bioDataPublications || []);
+  const detailedChunks = convertPublicationsToChunks(bioDataPublications || []);
 
   const handleCardClick = (index: number) => {
     setSelectedIndex(index);
@@ -71,7 +70,7 @@ const Publications: FC<PublicationsProps> = ({ bioDataPublications }) => {
           <div className='carousal-container'>
             {carousalChunks.map((chunks, index) => (
               <div key={index} onClick={() => handleCardClick(index)} style={{ cursor: 'pointer' }}>
-                <GlassCard isMulti={true} messageChunks={chunks} animationDelay={index * 300} />
+                <GlassCard isMulti={true} messageChunks={chunks} animationDelay={index * 650} />
               </div>
             ))}
             {carousalChunks.length === 0 && (

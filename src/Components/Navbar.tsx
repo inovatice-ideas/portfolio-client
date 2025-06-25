@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import dp from '../assets/dp.png';
+import dp from '../assets/dp2.png';
 import './Components.css';
 
 const tabs = [

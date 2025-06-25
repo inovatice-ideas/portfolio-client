@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
-import dp from "../assets/dp.png"
+import dp from "../assets/dp2.png"
 import wand from "../assets/wand.png"
 import "./Pages.css"
 

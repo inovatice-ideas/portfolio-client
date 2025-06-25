@@ -8,12 +8,9 @@ import background from './assets/Background.png'
 import editBackground from './assets/EditWallpaper.jpg'
 import "./main.css"
 import { useBioData, updateBioData, BioData } from './apicalls/fetchBio';
-import { useProjectData, addProjectData, updateProjectData, deleteProjectData, Project } from './apicalls/fetchProjects';
-import { useExperienceData, addExperienceData, updateExperienceData, deleteExperienceData, Experience } from './apicalls/fetchExperiences';
-import { useBlogData, addBlogData, updateBlogData, deleteBlogData, Blog } from './apicalls/fetchBlogs';
 import { useCvData, addCvData, updateCvData, deleteCvData, Cv } from './apicalls/fetchCv';
+import { usePublicationData, Publication } from './apicalls/fetchPublications';
 import { lazy, Suspense, useEffect, useState } from 'react';
-// import Footsteps from './Components/Footsteps';
 
 const Homepage = lazy(() => import('./Pages/Homepage'));
 const AboutMe = lazy(() => import('./Pages/AboutMe'));
@@ -28,17 +25,13 @@ function AppContent() {
   const location = useLocation();
   const isHomePage = location.pathname === '/';
   const bioData = useBioData();
-  const projectData = useProjectData();
-  const experienceData = useExperienceData();
-  const blogData = useBlogData();
   const cvData = useCvData();
+  const publicationData = usePublicationData();
   const { isEditMode } = useEditMode();
   
-  const [projects, setProjects] = useState<Project[]>([]);
   const [bio, setBio] = useState<BioData>({ bio: bioData?.bio || '' });
-  const [experiences, setExperiences] = useState<Experience[]>([]);
-  const [blogs, setBlogs] = useState<Blog[]>([]);
   const [cvs, setCvs] = useState<Cv[]>([]);
+  const [publications, setPublications] = useState<Publication[]>([]);
 
   useEffect(() => {
     if (bioData?.bio) {
@@ -47,28 +40,16 @@ function AppContent() {
   }, [bioData?.bio]);
 
   useEffect(() => {
-    if (projectData?.projects) {
-      setProjects(projectData.projects);
-    }
-  }, [projectData?.projects]);
-
-  useEffect(() => {
-    if (experienceData?.experiences) {
-      setExperiences(experienceData.experiences);
-    }
-  }, [experienceData?.experiences]);
-
-  useEffect(() => {
-    if (blogData?.blogs) {
-      setBlogs(blogData.blogs);
-    }
-  }, [blogData?.blogs]);
-
-  useEffect(() => {
     if (cvData?.cvs) {
       setCvs(cvData.cvs);
     }
   }, [cvData?.cvs]);
+
+  useEffect(() => {
+    if (publicationData?.publications) {
+      setPublications(publicationData.publications);
+    }
+  }, [publicationData?.publications]);
 
   return (
     <>
@@ -102,24 +83,16 @@ function AppContent() {
               />} />
               <Route 
                 path='/projects' 
-                element={<Projects bioDataProjects={projects} 
-                setProjects={setProjects}
-                addProjectData={addProjectData} 
-                updateProjectData={updateProjectData} 
-                deleteProjectData={deleteProjectData}  
-              />} />
+                element={<Projects />}
+              />
               <Route 
                 path='/experiences' 
-                element={<Experiences bioDataExperiences={experiences}
-                setExperiences={setExperiences}
-                addExperienceData={addExperienceData}
-                updateExperienceData={updateExperienceData}
-                deleteExperienceData={deleteExperienceData}
-              />} />
+                element={<Experiences />}
+              />
               <Route 
                 path='/publications' 
-                element={<Publications bioDataPublications={import.meta.env.VITE_ORCID} 
-              />} />
+                element={<Publications bioDataPublications={publications} />} 
+              />
               <Route 
                 path='/resume' 
                 element={<CV bioDataCvs={cvs} 
@@ -130,12 +103,8 @@ function AppContent() {
               />} />
               <Route 
                 path='/blogs' 
-                element={<Blogs bioDataBlogs={blogs} 
-                setBlogs={setBlogs}
-                addBlogData={addBlogData}
-                updateBlogData={updateBlogData}
-                deleteBlogData={deleteBlogData}
-              />} />
+                element={<Blogs />} 
+              />
               <Route 
                 path='/contactme' 
                 element={<ContactMe bioDataGmail={import.meta.env.VITE_GMAIL_LINK} 

@@ -1,17 +1,9 @@
-import { FC, useState } from 'react';
+import { FC, useState, useEffect } from 'react';
 import GlassCard, { MessageChunk } from '../Components/GlassCard';
 import './Pages.css';
 import DynamicForm, { Field } from '../Components/Form';
 import { useEditMode } from '../Components/EditMode';
-import { Blog } from '../apicalls/fetchBlogs';
-
-interface BlogsProps {
-  bioDataBlogs: Blog[];
-  setBlogs: React.Dispatch<React.SetStateAction<Blog[]>>;
-  addBlogData: (blog: Blog) => Promise<any>;
-  updateBlogData: (id: string, blog: Blog) => Promise<any>;
-  deleteBlogData: (id: string) => Promise<any>;
-}
+import { Blog, useBlogData, addBlogData, updateBlogData, deleteBlogData } from '../apicalls/fetchBlogs';
 
 const parseDate = (dateStr: string): Date => {
   const parts = dateStr.trim().split('/');
@@ -57,16 +49,24 @@ const blogFields: Field[] = [
   { label: 'Blog Content', name: 'blog', type: 'textarea', placeholder: 'Write your blog...', optional: false }
 ];
 
-const Blogs: FC<BlogsProps> = ({ bioDataBlogs, setBlogs, addBlogData, updateBlogData, deleteBlogData }) => {
+const Blogs: FC = () => {
   const { isEditMode } = useEditMode();
+  const [blogs, setBlogs] = useState<Blog[]>([]);
   const [isCarouselView, setIsCarouselView] = useState(true);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState<Blog>(defaultBlog);
   const [isEdit, setIsEdit] = useState(false);
   const [isHoveringAdd, setIsHoveringAdd] = useState(false);
+  const bioDataBlogs = useBlogData();
 
-  const sortedBlogs = [...bioDataBlogs].sort(
+  useEffect(() => {
+    if (bioDataBlogs?.blogs) {
+      setBlogs(bioDataBlogs.blogs);
+    }
+  }, [bioDataBlogs?.blogs]);
+
+  const sortedBlogs = [...blogs].sort(
     (a, b) => parseDate(b.date).getTime() - parseDate(a.date).getTime()
   );
 
@@ -105,7 +105,7 @@ const Blogs: FC<BlogsProps> = ({ bioDataBlogs, setBlogs, addBlogData, updateBlog
   
     try {
       const res = await deleteBlogData(blogId);
-      if (res.status === 204) {
+      if (res?.status === 204) {
         const updated = sortedBlogs.filter((_, idx) => idx !== selectedIndex);
         setBlogs(updated);
         setIsCarouselView(true);
@@ -129,7 +129,7 @@ const Blogs: FC<BlogsProps> = ({ bioDataBlogs, setBlogs, addBlogData, updateBlog
   
     if (isEdit) {
       const res = await updateBlogData(sortedBlogs[selectedIndex!]._id!, sanitizedData);
-      if (res.status === 204) {
+      if (res?.status === 204) {
         console.log("Update successful");
         const updated = sortedBlogs.map((blog, idx) => idx === selectedIndex ? formData : blog);
         setBlogs(updated);
@@ -141,12 +141,9 @@ const Blogs: FC<BlogsProps> = ({ bioDataBlogs, setBlogs, addBlogData, updateBlog
       }
     } else {
       const res = await addBlogData(sanitizedData);
-      if (res.status === 201) {
+      if (res?.status === 201) {
         console.log("Add successful");
-        const ex = await res.json();
-        console.log(ex)
-        console.log(ex.blog)
-        const updated = [...sortedBlogs, ex.blog];
+        const updated = [...sortedBlogs, res.blog];
         setBlogs(updated);
         setShowForm(false);
         setIsCarouselView(true);
@@ -168,7 +165,7 @@ const Blogs: FC<BlogsProps> = ({ bioDataBlogs, setBlogs, addBlogData, updateBlog
           <div className='carousal-container'>
             {carousalChunks.length > 0 && carousalChunks.map((chunks, index) => (
               <div key={index} onClick={() => handleCardClick(index)} style={{ cursor: 'pointer' }}>
-                <GlassCard isMulti={true} messageChunks={chunks} animationDelay={index * 300} />
+                <GlassCard isMulti={true} messageChunks={chunks} animationDelay={index * 650} />
               </div>
             ))}
             {carousalChunks.length === 0 && (

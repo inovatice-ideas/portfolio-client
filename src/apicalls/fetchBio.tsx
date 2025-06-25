@@ -8,10 +8,19 @@ export const useBioData = () => {
   const [data, setData] = useState<BioData | null>(null);
 
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_SERVER_URL}/api/bio`)
-      .then((res) => res.json())
-      .then(setData)
-      .catch(console.error);
+    const fetchBio = async () => {
+      try {
+        const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/bio`, {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' }
+        });
+        const rawBio = await res.json();
+        setData({ bio: rawBio.bio });
+      } catch (err) {
+        console.error('Error fetching bio:', err);
+      }
+    }
+    fetchBio();
   }, []);
 
   return data;

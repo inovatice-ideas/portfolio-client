@@ -14,14 +14,16 @@ export interface PublicationData {
   publications: Publication[];
 }
 
-export const usePublicationData = (orcid: string) => {
+export const usePublicationData = () => {
   const [data, setData] = useState<PublicationData | null>(null);
   useEffect(() => {
-    if (!orcid) return; // Optional: skip if ORCID is not passed yet
-  
-    fetch(`${import.meta.env.VITE_SERVER_URL}/api/publications/${orcid}`)
-      .then((res) => res.json())
-      .then((resData) => {
+    const fetchPublications = async () => {
+      try {
+        const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/publications/${import.meta.env.VITE_ORCID}`, {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' }
+        });
+        const resData = await res.json();
         const rawPublications = resData.data || []; // Adjust based on API shape
         const formattedPublications: Publication[] = rawPublications.map((b: any) => ({
           title: b.title || '',
@@ -33,9 +35,12 @@ export const usePublicationData = (orcid: string) => {
           publisher: b.publisher || ''
         }));
         setData({ publications: formattedPublications });
-      })
-      .catch(console.error);
-  }, [orcid]);
+      } catch (err) {
+        console.error('Error fetching publications:', err);
+      }
+    }
+    fetchPublications();
+  }, []);
 
   return data;
 };

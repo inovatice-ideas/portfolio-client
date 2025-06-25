@@ -16,12 +16,14 @@ export const useCvData = () => {
   const [data, setData] = useState<CvData | null>(null);
 
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_SERVER_URL}/api/cv`)
-      .then((res) => {
-        return res.json()
-      })
-      .then((rawCVs: any[]) => {
-        const formattedCVs: Cv[] = rawCVs.map((b) => ({
+    const fetchCv = async () => {
+      try {
+        const res = await fetch(`${import.meta.env.VITE_SERVER_URL}/api/cv`, {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' }
+        });
+        const rawCVs = await res.json();
+        const formattedCVs: Cv[] = rawCVs.map((b: any) => ({
           _id: b._id,
           name: b.name || '',
           type: b.type || '',
@@ -29,8 +31,11 @@ export const useCvData = () => {
           repository_name: b.repository_name || ''
         }));
         setData({ cvs: formattedCVs });
-      })
-      .catch(console.error);
+      } catch (err) {
+        console.error('Error fetching cv:', err);
+      }
+    }
+    fetchCv();
   }, []);
 
   return data;

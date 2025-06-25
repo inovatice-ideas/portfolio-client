@@ -1,17 +1,9 @@
-import { FC, useState } from 'react';
+import { FC, useState, useEffect } from 'react';
 import GlassCard, { MessageChunk } from '../Components/GlassCard';
 import './Pages.css';
 import DynamicForm, { Field } from '../Components/Form';
 import { useEditMode } from '../Components/EditMode';
-import { Experience } from '../apicalls/fetchExperiences';
-
-interface ExperiencesProps {
-  bioDataExperiences: Experience[];
-  setExperiences: React.Dispatch<React.SetStateAction<Experience[]>>;
-  addExperienceData: (experience: Experience) => Promise<any>;
-  updateExperienceData: (id: string, experience: Experience) => Promise<any>;
-  deleteExperienceData: (id: string) => Promise<any>;
-}
+import { Experience, useExperienceData, addExperienceData, updateExperienceData, deleteExperienceData } from '../apicalls/fetchExperiences';
 
 function parseTimelineEndDate(timeline: string): Date {
   const [_, end] = timeline.split(' - ');
@@ -79,14 +71,26 @@ const experienceFields: Field[] = [
   { label: 'Tech Stack', name: 'techStack', type: 'text', placeholder: 'Enter the tech stack', optional: false }
 ];
 
-const Experiences: FC<ExperiencesProps> = ({ bioDataExperiences, setExperiences, addExperienceData, updateExperienceData, deleteExperienceData }) => {
+const Experiences: FC = () => {
   const { isEditMode } = useEditMode();
+  const [experiences, setExperiences] = useState<Experience[]>([]);
   const [isCarouselView, setIsCarouselView] = useState(true);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState<Experience>(defaultExperience);
   const [isEdit, setIsEdit] = useState(false);
   const [isHoveringAdd, setIsHoveringAdd] = useState(false);
+  const bioDataExperiences = useExperienceData();
+
+  useEffect(() => {
+    if (bioDataExperiences?.experiences) {
+      setExperiences(bioDataExperiences.experiences);
+    }
+  }, [bioDataExperiences?.experiences]);
+
+  const sortedExperiences = sortExperiencesByTimeline(experiences);
+  const carousalChunks = convertExperiencesToCarousalChunks(sortedExperiences);
+  const detailedChunks = convertExperiencesToChunks(sortedExperiences);
 
   const handleCardClick = (index: number) => {
     setSelectedIndex(index);
@@ -123,7 +127,7 @@ const Experiences: FC<ExperiencesProps> = ({ bioDataExperiences, setExperiences,
   
     try {
       const res = await deleteExperienceData(experienceId);
-      if (res.status === 204) {
+      if (res?.status === 204) {
         const updated = sortedExperiences.filter((_, idx) => idx !== selectedIndex);
         setExperiences(updated);
         setIsCarouselView(true);
@@ -147,7 +151,7 @@ const Experiences: FC<ExperiencesProps> = ({ bioDataExperiences, setExperiences,
   
     if (isEdit) {
       const res = await updateExperienceData(sortedExperiences[selectedIndex!]._id!, sanitizedData);
-      if (res.status === 204) {
+      if (res?.status === 204) {
         console.log("Update successful");
         const updated = sortedExperiences.map((experience, idx) => idx === selectedIndex ? formData : experience);
         setExperiences(updated);
@@ -159,12 +163,9 @@ const Experiences: FC<ExperiencesProps> = ({ bioDataExperiences, setExperiences,
       }
     } else {
       const res = await addExperienceData(sanitizedData);
-      if (res.status === 201) {
+      if (res?.status === 201) {
         console.log("Add successful");
-        const ex = await res.json();
-        console.log(ex)
-        console.log(ex.experience)
-        const updated = [...sortedExperiences, ex.experience];
+        const updated = [...sortedExperiences, res.experience];
         setExperiences(updated);
         setShowForm(false);
         setIsCarouselView(true);
@@ -176,10 +177,6 @@ const Experiences: FC<ExperiencesProps> = ({ bioDataExperiences, setExperiences,
     }
   };
 
-  const sortedExperiences = sortExperiencesByTimeline(bioDataExperiences);
-  const carousalChunks = convertExperiencesToCarousalChunks(sortedExperiences);
-  const detailedChunks = convertExperiencesToChunks(sortedExperiences);
-
   return (
     <>
       {isCarouselView && !showForm ? (
@@ -187,7 +184,7 @@ const Experiences: FC<ExperiencesProps> = ({ bioDataExperiences, setExperiences,
           <div className='carousal-container'>
             {carousalChunks.map((chunks, index) => (
               <div key={index} onClick={() => handleCardClick(index)} style={{ cursor: 'pointer' }}>
-                <GlassCard isMulti={true} messageChunks={chunks} animationDelay={index * 300} />
+                <GlassCard isMulti={true} messageChunks={chunks} animationDelay={index * 650} />
               </div>
             ))}
             {carousalChunks.length === 0 && (
