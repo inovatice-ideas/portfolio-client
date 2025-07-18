@@ -176,8 +176,10 @@
 .page-glass {
   max-width: 900px;
   width: 90%;
-  margin: 0 auto;
-  margin-top: 10vh;
+  height: auto;
+  max-height: none;
+  margin-top: auto;
+  margin-bottom: auto;
 }
 .multi-glass {
   max-width: 350px;

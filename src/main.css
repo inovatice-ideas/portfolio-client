@@ -26,12 +26,13 @@ body {
 .page-content {
   position: relative;
   margin-top: 65px;
+  padding-top: 7vh;
+  padding-bottom: 5vh;
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100vw;
-  height: 85vh;
-  max-height: 85vh;
+  height: 73vh;
   overflow-y: auto;
   scrollbar-width: none;
 }

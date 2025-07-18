@@ -67,7 +67,8 @@ function AppContent() {
           <p className="ml-4">Loading...</p>
         </div>
       }>
-      <div className="min-h-[calc(100vh-4rem)] flex flex-col">
+         {/* className="min-h-[calc(100vh-4rem)] flex flex-col" */}
+      <div>
         {isHomePage ? (
           <Routes>
             <Route path='/' element={<Homepage bioDataName={import.meta.env.VITE_NAME} bioDataDesignation={import.meta.env.VITE_DESIGNATION} />} />
